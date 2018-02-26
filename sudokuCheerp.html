@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="sudokuCheerp.js"></script>
+
+</head>
+<body onload="tablero(9,9);">
+
+<p id="etiqueta1"/>
+<div id="contenedor">
+<table id="tabla" border="0" cellspacing="0" cellpadding="0"/>
+<button id="boton1" onclick="recogeResuelve();">resuelve!</button>
+</div>
+<style>
+table, th, td {
+    border: 1px solid black;
+}
+table {
+	height: 450px;
+	width: 540px;
+}
+#contenedor input{
+	height: 100%;
+	width: 10%;
+}
+
+</style>
+<script>
+	var grid = [
+				[0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0] 
+				];
+
+	function tablero(rows, cols) {
+		var tabla1 = document.getElementById("tabla");
+		for (i=0; i<rows; i++) {
+			var tr = document.createElement("TR");			
+			for (j=0; j<cols; j++) {
+				var td = document.createElement("INPUT");	
+				td.id = "in"+i+"a"+j;
+				tr.appendChild(td);
+			}
+			tabla1.appendChild(tr);
+		}  
+	}
+	
+	function leeTablero(){
+		for (i=0; i<9; i++) {
+			for (j=0; j<9; j++) {
+				var casilla = document.getElementById("in"+i+"a"+j);
+				var valorCasilla = casilla.value;
+				if(valorCasilla==="")valorCasilla=0;
+				grid[i][j]=parseInt(valorCasilla);
+			}
+		}
+	}	
+	
+	function pintaTablero(){
+		etiqueta1.innerHTML="";
+		for (var row = 0; row < 9; row++)
+		{
+			for (var col = 0; col < 9; col++){
+				etiqueta1.innerHTML+=""+grid[row][col];
+			}
+			etiqueta1.innerHTML+="<br>";
+		}
+	}
+	
+	function recogeResuelve(){
+		leeTablero();
+		pintaTablero();
+		var etiqueta1 = document.getElementById("etiqueta1");
+		var modExporASM = new ModulosExportados();
+		for (var row = 0; row < 9; row++)
+		{
+			modExporASM.ponValoresFilaX(row,grid[row]);
+		}	
+		resuelve(modExporASM);	
+	}
+	
+	function resuelve(modExporASM){
+		etiqueta1.innerHTML="";
+		if(modExporASM.resuelvelo(1)){
+			for (var row = 0; row < 9; row++)
+			{
+				for (var col = 0; col < 9; col++){
+					etiqueta1.innerHTML+=""+modExporASM.dameValorCasillaXY(row,col);
+				}
+				etiqueta1.innerHTML+="<br>";
+			}
+		}
+		else{
+			etiqueta1.innerHTML="no tiene solucion";
+		}
+	}
+	
+</script>
+</body>
+</html>
